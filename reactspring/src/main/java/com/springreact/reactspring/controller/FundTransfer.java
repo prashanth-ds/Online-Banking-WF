@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springreact.reactspring.request.TransferRequest;
+import com.springreact.reactspring.Respository.TransferRepo;
 import com.springreact.reactspring.Respository.UserRep;
+import com.springreact.reactspring.Service.TransferService;
 import com.springreact.reactspring.Service.UserServiceImpl;
 import com.springreact.reactspring.Service.UserValidation;
 import com.springreact.reactspring.models.Transactions;
 import com.springreact.reactspring.models.User;
+import com.springreact.reactspring.models.Transfer;
 
 
 @RestController
@@ -23,14 +26,15 @@ import com.springreact.reactspring.models.User;
 @CrossOrigin
 public class FundTransfer {
 
-	@Autowired
-	private UserServiceImpl service;
 	
 	@Autowired
 	private UserValidation validation;
 	
 	@Autowired
     UserRep userRep;
+	
+	@Autowired
+	TransferService transferService;
 	
 	@PostMapping(value="/fundTransfer")
 	public String transferFunds(@RequestBody TransferRequest request) {
@@ -45,6 +49,12 @@ public class FundTransfer {
 				return status;
 			}
 			else {
+				
+				Transfer insert_transfer_info = new Transfer(request.getAccount_ID(), request.getBeneficiary_ACCT(), request.getBeneficiary_ACCT_TYPE(), request.getAmount());
+				
+				transferService.saveTransferData(insert_transfer_info);
+				
+				
 				
 				// set of below lines of code is for user's transaction
 				Transactions insert_trans_user = new Transactions(LocalDate.now().toString(), request.getBeneficiary(), request.getBeneficiary_ACCT(), request.getBeneficiary_ACCT_TYPE(), "Debit", request.getAmount());
@@ -68,6 +78,7 @@ public class FundTransfer {
 				
 				userRep.save(beneficiary_instance);
 				
+				
 				return "Transaction complete";
 				
 			}
@@ -88,5 +99,6 @@ public class FundTransfer {
 		
 		}
 	}
-	
+
+
 }
