@@ -1,9 +1,12 @@
 package com.springreact.reactspring.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.TableGenerator;
 
 @Entity
@@ -24,7 +27,8 @@ public class Transactions {
 	private String transactionType; //debit or credit
 	private String amount;
 	
-	
+
+
 	public Transactions( String transactionDate, String beneficiary, String beneficiary_acct ,String accountType,
 			String transactionType, String amount) {
 		super();
@@ -40,6 +44,19 @@ public class Transactions {
 	
 	public String getBeneficiary_acct() {
 		return beneficiary_acct;
+	}
+
+
+	public Transactions(int transactionId, String transactionDate, String beneficiary, String beneficiary_acct,
+			String accountType, String transactionType, String amount) {
+		super();
+		this.transactionId = transactionId;
+		this.transactionDate = transactionDate;
+		this.beneficiary = beneficiary;
+		this.beneficiary_acct = beneficiary_acct;
+		this.accountType = accountType;
+		this.transactionType = transactionType;
+		this.amount = amount;
 	}
 
 
